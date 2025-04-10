@@ -1,16 +1,17 @@
-from sqlmodel import Field, SQLModel
-from typing import Union
+from sqlmodel import Field, SQLModel, Column, Integer, String
+from typing import Optional
 
 class UserBase(SQLModel):
-    first_name: str = Field(default=None)
-    last_name: str = Field(default=None)
-    email: str = Field(default=None)
+    first_name: str = Field()
+    last_name: str = Field()
+    email: str = Field()
     password: str = Field()
 
 class User(UserBase, table=True):
-    id: Union[int, None] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True, nullable=False)
 
 class UserUpdate(UserBase):
-    first_name: str = Field(default=None) | None
-    last_name: str = Field(default=None) | None
-    email: str = Field(default=None) | None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None    
+    password: Optional[str] = None
