@@ -1,20 +1,18 @@
-import { Router } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
-import Nav from "~/components/Nav";
-import "./app.css";
+import { useState } from 'react'
 
-export default function App() {
+function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <Router
-      root={props => (
-        <>
-          <Nav />
-          <Suspense>{props.children}</Suspense>
-        </>
-      )}
-    >
-      <FileRoutes />
-    </Router>
-  );
+    <>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button className='btn' onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+      </div>
+    </>
+  )
 }
+
+export default App

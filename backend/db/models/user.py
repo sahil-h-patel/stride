@@ -1,5 +1,6 @@
 from sqlmodel import Field, SQLModel, Column, Integer, String
 from typing import Optional
+import bcrypt
 
 class UserBase(SQLModel):
     first_name: str = Field()
@@ -15,3 +16,11 @@ class UserUpdate(UserBase):
     last_name: Optional[str] = None
     email: Optional[str] = None    
     password: Optional[str] = None
+
+def hash_pswd(password: str) -> str:
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
+
+def verify_password(stored_hashed_password: str, input_password: str) -> bool:
+    return bcrypt.checkpw(input_password.encode('utf-8'), stored_hashed_password.encode('utf-8'))
