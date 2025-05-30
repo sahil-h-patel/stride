@@ -25,6 +25,7 @@ import { Textarea } from "./ui/textarea"
 import { DateRangePicker } from "./date-range-picker"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Label } from "./ui/label"
+import { ListPlus, CalendarPlus } from "lucide-react"
 
 export default function CreateMenu() {
   const [openSheet, setOpenSheet] = useState<"task" | "event" | null>(null)
@@ -37,9 +38,11 @@ export default function CreateMenu() {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem onClick={() => setOpenSheet("task")}>
+            <ListPlus/>
             Create Task
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpenSheet("event")}>
+            <CalendarPlus/>
             Create Event
           </DropdownMenuItem>
         </DropdownMenuContent>
