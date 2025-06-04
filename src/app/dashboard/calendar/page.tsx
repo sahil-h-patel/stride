@@ -1,27 +1,24 @@
 // app/dashboard/calendar/page.tsx
-"use client";
-
-import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { DayView, MonthView, WeekView } from "@/components/calendar-view";
 
-export default function Dashboard() {
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+// Server component that handles async searchParams
+export default async function Dashboard({ 
+  searchParams 
+}: { 
+  searchParams: Promise<{ view?: string }> 
+}) {
+  const params = await searchParams;
+  const view = params.view || "week";
+
   return (
     <Suspense fallback={<div>Loading calendar view...</div>}>
-      <View />
-    </Suspense>
-  );
-}
-
-function View() {
-  const searchParams = useSearchParams();
-  const view = searchParams.get("view") || "week";
-
-  return (
-    <>
       {view === "month" && <MonthView />}
       {view === "week" && <WeekView />}
       {view === "day" && <DayView />}
-    </>
+    </Suspense>
   );
 }
