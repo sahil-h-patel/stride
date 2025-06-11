@@ -17,7 +17,6 @@ export default function CalendarViewSelect() {
     const newView = e.currentTarget.value;
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", newView);
-    // Use navigate to update the URL. relative: "path" ensures we only change search params.
     navigate(`?${params.toString()}`, { relative: "path" });
   };
 

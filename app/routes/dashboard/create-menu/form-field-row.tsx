@@ -19,7 +19,7 @@ export default function FormFieldRow({
 }: Props) {
   return (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id} className="col-span-2 text-right">
+      <Label htmlFor={id} className="col-span-2 text-left">
         {label}
       </Label>
       <div className={`col-start-4 col-span-8 ${className}`}>
