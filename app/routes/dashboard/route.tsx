@@ -1,11 +1,10 @@
-import { Link, Outlet } from "@remix-run/react";
-import CalendarViewSelect from "./navbar/calendar-view-select";
+import { useLocation, Link, Outlet } from "@remix-run/react";
+import CalendarViewSelect from "./navbar/calendar-view-select/calendar-view-select";
 import CreateMenu from "./create-menu/create-menu";
 import SearchBar from "./navbar/search-bar";
 import { Avatar, AvatarImage, AvatarFallback } from "~/components/ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "~/components/ui/dropdown-menu";
 import { User, Calendar, List, Settings } from "lucide-react";
-import { useLocation } from "@remix-run/react";
 
 const handleSearch = (query: string) => {
     console.log("Search query:", query)

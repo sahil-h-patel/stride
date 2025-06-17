@@ -10,6 +10,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { SiNotion, SiGoogle } from "react-icons/si";
+import { Form } from "@remix-run/react"
 
 export function LoginForm({
   className,
@@ -25,7 +26,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <Form method="post">
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -44,11 +45,12 @@ export function LoginForm({
               </div>
               <div className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
+                    name="username"
+                    id="username"
+                    type="username"
+                    placeholder=""
                     required
                   />
                 </div>
@@ -56,13 +58,18 @@ export function LoginForm({
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                     <a
-                      href="#"
+                      href="/forgot-password"
                       className="ml-auto text-sm underline-offset-4 hover:underline"
                     >
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input 
+                    name="password"
+                    id="password" 
+                    type="password" 
+                    required 
+                  />
                 </div>
                 <Button type="submit" className="w-full">
                   Login
@@ -75,12 +82,12 @@ export function LoginForm({
                 </a>
               </div>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="/">Terms of Service</a>{" "}
+        and <a href="/">Privacy Policy</a>.
       </div>
     </div>
   )

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-select {
+  user-select: none;
+}
+
 html,
 body {
   @apply w-full h-full;

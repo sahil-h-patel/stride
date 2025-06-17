@@ -6,8 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
-  previewFeatures = ["typedSql"]
+  output   = "../node_modules/@prisma-app/client"
 }
 
 datasource db {
@@ -16,11 +15,46 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  address    String
-  occupation String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String   // IMPORTANT: This should be a HASHED password, never store plaintext!
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events Event[]
+  tasks  Task[]
+}
+
+// Event model: Represents scheduled items on the calendar.
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  isRescheduable      Boolean   @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Task model: Represents items in a to-do list.
+model Task {
+  id      String     @id @default(cuid())
+  title   String
+  content String?
+  status  TaskStatus @default(NOT_STARTED) // Uses the TaskStatus enum below for type safety.
+  dueDate DateTime  // A task can have an optional due date.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Enum for Task Status: Restricts the 'status' field to only these values.
+enum TaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
 }

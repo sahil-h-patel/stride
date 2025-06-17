@@ -8,8 +8,9 @@ import {
 } from "~/components/ui/popover";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { useState } from "react"; 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 export function DateTimePicker() {
   const [date, setDate] = useState<Date>();
@@ -62,12 +63,28 @@ export function DateTimePicker() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-2 space-y-2">
+        <Select
+          onValueChange={(value) =>
+            setDate(addDays(new Date(), parseInt(value)))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent position="popper">
+            <SelectItem value="0">Today</SelectItem>
+            <SelectItem value="1">Tomorrow</SelectItem>
+            <SelectItem value="3">In 3 days</SelectItem>
+            <SelectItem value="7">In a week</SelectItem>
+          </SelectContent>
+        </Select>
         <div className="sm:flex">
           <Calendar
             mode="single"
             selected={date}
             onSelect={handleDateSelect}
+            className="rounded-lg"
           />
           <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
             <ScrollArea className="w-64 sm:w-auto">

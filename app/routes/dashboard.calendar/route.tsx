@@ -1,7 +1,6 @@
-
-import { data, type LoaderFunctionArgs } from "@remix-run/node";
+import { type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { DayView, MonthView, WeekView } from "~/components/calendar-view";
+import { DayView, MonthView, WeekView } from "~/routes/dashboard/navbar/calendar-view-select/view";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
