@@ -1,11 +1,18 @@
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
 import { addDays, format, isToday, startOfWeek } from 'date-fns';
+import { mockEvents, getContrastingTextColor, getCol, getRow } from './event';
+import { cn } from '~/lib/utils';
 
 export default function WeekView() {
     const hours = Array.from({ length: 24 }).map((_, index) =>
       format(new Date(0, 0, 0, index), "h a")
     )
     const start = startOfWeek(new Date(), { weekStartsOn: 0 }); // Sunday
+
+    const INCREMENTS_PER_HOUR = 12; // 60 mins / 5 min intervals = 12
+    const TOTAL_ROWS = 24 * INCREMENTS_PER_HOUR; // 288 rows
+    const ROW_HEIGHT_PX = 56 / INCREMENTS_PER_HOUR;
+
     return (
      <div className="flex flex-col w-[97vw]">
         <div className="flex pl-16 h-fit">
@@ -35,14 +42,57 @@ export default function WeekView() {
                     </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-7 grid-rows-24 w-full h-full border-t border-l">
-                    {Array.from({length: 168}).map((_, index) => (
-                        <div
-                        key={index}
-                        className="border-r border-b h-14"
-                        >
-                        </div>
-                    ))}
+                <div className="grid grid-cols-7 grid-rows-288 w-full h-full border-t border-l"
+                    style={{ gridTemplateRows: `repeat(${TOTAL_ROWS}, ${ROW_HEIGHT_PX}px)`}}>
+                      {Array.from({length: 7 * TOTAL_ROWS}).map((_, i) => {
+                        const colIndex = i % 7 + 1
+                        const rowIndex = Math.floor(i / 7)+1;
+                        return (
+                          <div
+                          key={i}
+                          className={cn(
+                            "border-r",
+                            // Add a top border for every hour mark
+                            rowIndex % INCREMENTS_PER_HOUR === 0 && "border-b"
+                          )}
+                          style={{
+                            gridColumn: colIndex,
+                            gridRow: rowIndex,
+                            height: ROW_HEIGHT_PX
+                          }}
+                          >
+                          </div>
+                        );      
+                    })}
+                    {/* --- Render Events on the Grid --- */}
+                    {mockEvents.map((event, i) => {
+                        const { gridRow } = getRow(event.start, event.end);
+                        const { gridCol } = getCol(event.start)
+                        const durationInMinutes = (event.end.getTime() - event.start.getTime()) / (1000 * 60);
+                        const textColorClass = getContrastingTextColor(event.color);
+    
+                        return (
+                            <div
+                                key={i}
+                                className={
+                                    cn("relative w-full px-2 py-0.5 rounded-lg text-xs mx-1 ${event.color}",
+                                    textColorClass)}
+                                style={{
+                                    backgroundColor: event.color,
+                                    gridColumnStart: gridCol,
+                                    gridRow: gridRow,
+                                    
+                                }}
+                            >
+                                <p className="font-bold whitespace-nowrap">{event.title}</p>
+                                {durationInMinutes > 15 && (
+                                    <p className="whitespace-nowrap">
+                                        {format(event.start, "h:mm a")} - {format(event.end, "h:mm a")}
+                                    </p>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
             <ScrollBar orientation="vertical" />

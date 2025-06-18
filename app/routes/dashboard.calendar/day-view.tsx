@@ -1,6 +1,6 @@
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area';
 import { getDay, format } from 'date-fns';
-import { events, getContrastingTextColor, getEventGridPosition } from "~/lib/formatEvents";
+import { mockEvents, getContrastingTextColor, getRow } from "./event";
 import { cn } from '~/lib/utils';
 
 export default function DayView() {
@@ -48,8 +48,8 @@ export default function DayView() {
                 ))}
 
                 {/* --- Render Events on the Grid --- */}
-                {events.map((event, i) => {
-                    const { gridRow } = getEventGridPosition(event.start, event.end);
+                {mockEvents.map((event, i) => {
+                    const { gridRow } = getRow(event.start, event.end);
                     const durationInMinutes = (event.end.getTime() - event.start.getTime()) / (1000 * 60);
                     const textColorClass = getContrastingTextColor(event.color);
 
