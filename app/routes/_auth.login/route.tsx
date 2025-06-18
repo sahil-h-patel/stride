@@ -3,9 +3,9 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import bcrypt from "bcrypt";
-import { LoginForm } from "./login-form";
 import { prisma } from "~/lib/prisma";
-import { createUserSession } from "~/lib/auth.server"; // 1. Import the session helper
+import { createUserSession } from "~/lib/auth.server";
+import { LoginForm } from "./login-form";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Login to Stride" }];
@@ -13,20 +13,31 @@ export const meta: MetaFunction = () => {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const fields = Object.fromEntries(formData);
-  const { username, password } = fields;
+  // Assume the form has an input with name="identifier" for email/username
+  const identifier = formData.get("identifier") as string | null;
+  const password = formData.get("password") as string | null;
 
-  if (typeof username !== "string" || typeof password !== "string") {
-    return ({ error: "Invalid form submission" , status: 400 });
+  if (typeof identifier !== "string" || typeof password !== "string") {
+    return ({ error: "Invalid form submission", status: 400 });
   }
-  // Find the user by their email
-  const user = await prisma.user.findUnique({ where: { username } });
+  // Determine if the identifier is an email or a username
+  const isEmail = identifier.includes("@");
+
+  // Build the 'where' clause for the Prisma query
+  const where = isEmail ? { email: identifier } : { username: identifier };
+
+  // Find the user by their email OR username
+  const user = await prisma.user.findUnique({ where });
 
   // Check if the user exists and the password is correct
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    return ({ error: "Invalid username or password" , status: 400 });
+    return (
+      { error: "Invalid credentials. Please try again.",
+        status: 400 }
+    );
   }
-  // 2. On successful login, create the user session and redirect
+
+  // On successful login, create the user session and redirect to the dashboard
   return createUserSession(user.id, "/dashboard");
 }
 

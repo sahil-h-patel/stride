@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@remix-run/react";
 import CreateMenu from "./create-menu";
 import SearchBar from "./search-bar";
-import CalendarViewSelect from "./calendar-view-select";
+import CalendarViewSelect from "~/routes/dashboard.calendar/calendar-view-select";
 import { 
     DropdownMenu, 
     DropdownMenuTrigger, 
@@ -17,7 +17,7 @@ const handleSearch = (query: string) => {
     // Do something with the query: fetch data, filter list, etc.
 }
 
-function Navbar() {
+function Navbar({username, email}:{username: string, email: string}) {
     const location = useLocation();
 
     return (
@@ -34,12 +34,19 @@ function Navbar() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn"/>
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src="https:some-profile-pic.png" alt={username}/>
+                        <AvatarFallback><User/></AvatarFallback>
                     </Avatar>            
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{username}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                        {email}
+                        </p>
+                    </div>
+                    </DropdownMenuLabel>                    
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                         <User/>

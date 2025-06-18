@@ -45,11 +45,11 @@ export function LoginForm({
               </div>
               <div className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="identifier">Username or Email</Label>
                   <Input
-                    name="username"
-                    id="username"
-                    type="username"
+                    name="identifier"
+                    id="identifier"
+                    type="text"
                     placeholder=""
                     required
                   />

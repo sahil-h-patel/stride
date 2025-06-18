@@ -1,6 +1,8 @@
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { DayView, MonthView, WeekView } from "~/routes/dashboard/navbar/calendar-view-select/views";
+import DayView from "./day-view";
+import WeekView from "./week-view";
+import MonthView from "./month-view";
 
 const viewComponents = {
   day: DayView,
@@ -10,7 +12,10 @@ const viewComponents = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
-  const view = url.searchParams.get("view") as keyof typeof viewComponents;
+  let view = url.searchParams.get("view") as keyof typeof viewComponents;
+  if (!view || !Object.keys(viewComponents).includes(view)) {
+    view = "month";
+  }
   return { view };
 }
 
