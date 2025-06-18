@@ -64,7 +64,7 @@ export default function WeekView() {
                           </div>
                         );      
                     })}
-                    {/* --- Render Events on the Grid --- */}
+
                     {mockEvents.map((event, i) => {
                         const { gridRow } = getRow(event.start, event.end);
                         const { gridCol } = getCol(event.start)

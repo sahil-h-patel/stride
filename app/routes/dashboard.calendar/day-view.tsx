@@ -23,7 +23,6 @@ export default function DayView() {
         <ScrollArea className="h-[85vh] overflow-hidden border rounded-md">
             <div className="grid grid-cols-[auto_1fr] grid-rows-288 relative pt-3"
                  style={{ gridTemplateRows: `repeat(${TOTAL_ROWS}, ${ROW_HEIGHT_PX}px)` }}>
-                {/* --- Column 1: Hour Markers --- */}
                 {hours.map((hour, i) => (
                     <div
                         key={i}
@@ -33,8 +32,6 @@ export default function DayView() {
                        {hour}
                     </div>
                 ))}
-
-                {/* --- Column 2: Grid Lines --- */}
                 {Array.from({ length: 24 }).map((_, i) => (
                     <div
                     key={`hour-line-${i}`}
@@ -46,8 +43,6 @@ export default function DayView() {
                     }}
                     ></div>
                 ))}
-
-                {/* --- Render Events on the Grid --- */}
                 {mockEvents.map((event, i) => {
                     const { gridRow } = getRow(event.start, event.end);
                     const durationInMinutes = (event.end.getTime() - event.start.getTime()) / (1000 * 60);
