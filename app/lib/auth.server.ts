@@ -1,4 +1,5 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import { User } from "@prisma/client";
+import { createCookieSessionStorage, redirect } from "react-router";
 
 // A secret string used to sign the cookie.
 // You should change this to a long, random string and store it in your .env file
@@ -21,28 +22,28 @@ export const sessionStorage = createCookieSessionStorage({
 });
 
 // 2. A helper function to get the user ID from the session cookie
-export async function getUserId(request: Request) {
+export async function getUser(request: Request) {
   const session = await sessionStorage.getSession(
     request.headers.get("Cookie")
   );
-  const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") return null;
-  return userId;
+  const user = session.get("user");
+  if (!user || typeof user !== "object" || !("id" in user)) return null;
+  return user as User;
 }
 
 // 3. A helper function to protect routes that require a logged-in user
 export async function requireUserId(request: Request) {
-  const userId = await getUserId(request);
-  if (!userId) {
+  const user: User | null = await getUser(request);
+  if (!user) {
     throw redirect("/login");
   }
-  return userId;
+  return user.id;
 }
 
 // 4. A helper function to handle the login process
-export async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(user: User, redirectTo: string) {
   const session = await sessionStorage.getSession();
-  session.set("userId", userId);
+  console.log("createUserSession:",user)
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session),

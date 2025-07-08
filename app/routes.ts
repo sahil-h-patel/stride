@@ -1,3 +1,19 @@
-import type { RouteConfig } from "@remix-run/route-config";
+import { RouteConfig } from "@react-router/dev/routes";
+import { remixRoutesOptionAdapter } from "@react-router/remix-routes-option-adapter";
+import { flatRoutes } from "remix-flat-routes";
 
-export default [] satisfies RouteConfig;
+export default remixRoutesOptionAdapter((defineRoutes) => {
+  return flatRoutes("routes", defineRoutes, {
+    ignoredRouteFiles: [
+      '**/.*',
+      '**/*.server.*',
+      '**/*.client.*',
+    ], // Ignore dot files (like .DS_Store)
+    //appDir: 'app',
+    //routeDir: 'routes',
+    //basePath: '/',
+    //paramPrefixChar: '$',
+    //nestedDirectoryChar: '+',
+    //routeRegex: /((\${nestedDirectoryChar}[\/\\][^\/\\:?*]+)|[\/\\]((index|route|layout|page)|(_[^\/\\:?*]+)|([^\/\\:?*]+\.route)))\.(ts|tsx|js|jsx|md|mdx)$$/,
+  });
+}) satisfies RouteConfig

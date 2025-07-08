@@ -1,12 +1,14 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import { useLoaderData, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { type LoaderFunctionArgs, type LinksFunction } from "react-router";
 import styles from "~/tailwind.css?url"
+import { getUser } from "~/lib/auth.server"; // Your helper function
+
+// The root loader runs on every request
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await getUser(request);
+  // Return the user object (or null if not logged in)
+  return { user };
+}
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -45,7 +47,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App(){
+  const { user } = useLoaderData<typeof loader>();
+
   return (
-    <Outlet/>          
+    <Outlet context={{ user }}/>          
   )
 }

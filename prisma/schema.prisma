@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../node_modules/@prisma-app/client"
+  provider = "prisma-client-js"           
 }
 
 datasource db {
@@ -32,7 +31,9 @@ model Event {
   description String?
   startTime   DateTime
   endTime     DateTime
+  color       String    @default("#000000")
   isRescheduable      Boolean   @default(false)
+  tags        String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId String
@@ -43,9 +44,12 @@ model Event {
 model Task {
   id      String     @id @default(cuid())
   title   String
-  content String?
+  description String?
+  expectedTime Int
+  priority PriorityLevel
   status  TaskStatus @default(NOT_STARTED) // Uses the TaskStatus enum below for type safety.
-  dueDate DateTime  // A task can have an optional due date.
+  dueDate DateTime 
+  tags    String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId String
@@ -57,4 +61,10 @@ enum TaskStatus {
   NOT_STARTED
   IN_PROGRESS
   COMPLETED
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
 }
